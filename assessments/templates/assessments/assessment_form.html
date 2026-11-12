@@ -1,0 +1,231 @@
+{% extends 'assessments/base.html' %}
+
+{% block title %}Assessment #{{ session.id }}{% endblock %}
+
+{% block content %}
+<div x-data="assessmentChat()" x-init="init()" class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow mb-6 p-6">
+        <h2 class="text-2xl font-bold text-gray-900">Assessment Session #{{ session.id }}</h2>
+        <p class="mt-2 text-gray-600">Please answer the following questions honestly. Your responses will be reviewed by a mental health professional.</p>
+        
+        <div class="mt-4">
+            <div class="flex items-center">
+                <span class="text-sm text-gray-500 mr-2">Status:</span>
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                    {{ session.status }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="bg-white rounded-lg shadow">
+        <!-- Messages Area -->
+        <div id="messages" class="h-96 overflow-y-auto p-6 space-y-4">
+            <!-- Welcome Message -->
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                        AI
+                    </div>
+                </div>
+                <div class="ml-3 flex-1">
+                    <div class="bg-gray-100 rounded-lg p-3">
+                        <p class="text-sm text-gray-900">
+                            Hello! I'm here to help conduct a mental health assessment. I'll ask you a series of questions about your mood, stress, sleep, anxiety, daily activities, and any concerns you may have. Please answer as honestly and completely as you can.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent's first question -->
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                        AI
+                    </div>
+                </div>
+                <div class="ml-3 flex-1">
+                    <div class="bg-gray-100 rounded-lg p-3">
+                        <p class="text-sm text-gray-900" x-text="currentQuestion"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic messages will be appended here -->
+            <template x-for="message in messages" :key="message.id">
+                <div class="flex items-start" :class="message.type === 'user' ? 'justify-end' : ''">
+                    <template x-if="message.type === 'agent'">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                                    AI
+                                </div>
+                            </div>
+                            <div class="ml-3 flex-1">
+                                <div class="bg-gray-100 rounded-lg p-3">
+                                    <p class="text-sm text-gray-900" x-text="message.text"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template x-if="message.type === 'user'">
+                        <div class="flex items-end justify-end">
+                            <div class="mr-3">
+                                <div class="bg-blue-600 text-white rounded-lg p-3">
+                                    <p class="text-sm" x-text="message.text"></p>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div class="h-8 w-8 rounded-full bg-gray-400 flex items-center justify-center text-white">
+                                    U
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Loading indicator -->
+            <div x-show="loading" class="flex items-start">
+                <div class="flex-shrink-0">
+                    <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                        AI
+                    </div>
+                </div>
+                <div class="ml-3">
+                    <div class="bg-gray-100 rounded-lg p-3">
+                        <p class="text-sm text-gray-600">Thinking...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="border-t border-gray-200 p-4">
+            <form @submit.prevent="sendMessage" class="flex space-x-4">
+                <input
+                    type="text"
+                    x-model="userInput"
+                    :disabled="loading || isComplete"
+                    placeholder="Type your response..."
+                    class="flex-1 rounded-md border-gray-300 px-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    required
+                />
+                <button
+                    type="submit"
+                    :disabled="loading || isComplete || !userInput.trim()"
+                    class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                    Send
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Completion Message -->
+    <div x-show="isComplete" class="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
+        <h3 class="text-lg font-medium text-green-900">Assessment Complete!</h3>
+        <p class="mt-2 text-sm text-green-700">Thank you for completing the assessment. Your responses have been recorded and will be reviewed by a professional.</p>
+        <div class="mt-4">
+            <a href="{% url 'summary_detail' session.id %}" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                View Summary
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function assessmentChat() {
+    return {
+        userInput: '',
+        messages: [],
+        loading: false,
+        isComplete: false,
+        currentQuestion: "How would you describe your mood and emotional wellbeing over the past 2 weeks?",
+        messageId: 0,
+
+        init() {
+            // Scroll to bottom on init
+            this.$nextTick(() => {
+                const messagesDiv = document.getElementById('messages');
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            });
+        },
+
+        async sendMessage() {
+            if (!this.userInput.trim() || this.loading) return;
+
+            const message = this.userInput.trim();
+            this.userInput = '';
+
+            // Add user message
+            this.messages.push({
+                id: this.messageId++,
+                type: 'user',
+                text: message
+            });
+
+            this.loading = true;
+
+            // Scroll to bottom
+            this.$nextTick(() => {
+                const messagesDiv = document.getElementById('messages');
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            });
+
+            try {
+                // Send to backend
+                const response = await fetch('{% url "assessment_message" session.id %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    // Add agent response
+                    this.messages.push({
+                        id: this.messageId++,
+                        type: 'agent',
+                        text: data.message
+                    });
+
+                    if (data.is_complete) {
+                        this.isComplete = true;
+                    }
+                } else {
+                    // Handle error
+                    this.messages.push({
+                        id: this.messageId++,
+                        type: 'agent',
+                        text: 'Sorry, there was an error processing your response. Please try again.'
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                this.messages.push({
+                    id: this.messageId++,
+                    type: 'agent',
+                    text: 'Sorry, there was a connection error. Please try again.'
+                });
+            } finally {
+                this.loading = false;
+
+                // Scroll to bottom
+                this.$nextTick(() => {
+                    const messagesDiv = document.getElementById('messages');
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                });
+            }
+        }
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'assessments/base.html' %}
+
+{% block title %}Summary - Assessment #{{ session.id }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900">Assessment Summary</h2>
+                <p class="mt-2 text-gray-600">Session #{{ session.id }} - {{ session.created_at|date:"M d, Y H:i" }}</p>
+            </div>
+            <div>
+                <a href="{% url 'dashboard' %}" class="text-blue-600 hover:text-blue-900">← Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Card -->
+    <div class="bg-white rounded-lg shadow mb-6 p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-medium text-gray-900">Status</h3>
+                <div class="mt-2">
+                    {% if session.status == 'completed' %}
+                        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Completed
+                        </span>
+                    {% elif session.status == 'requires_review' %}
+                        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                            Requires Professional Review
+                        </span>
+                    {% else %}
+                        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                            {{ session.status }}
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="text-right">
+                <p class="text-sm text-gray-500">User ID</p>
+                <p class="text-lg font-medium text-gray-900">{{ session.user_identifier }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary -->
+    {% if summary %}
+    <div class="bg-white rounded-lg shadow mb-6 p-6">
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Professional Summary</h3>
+        <div class="prose max-w-none">
+            <div class="text-gray-700 space-y-4">{{ summary.summary_text|linebreaks }}</div>
+        </div>
+
+        {% if summary.missing_info %}
+        <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+            <h4 class="text-sm font-medium text-yellow-900">Missing Information</h4>
+            <ul class="mt-2 text-sm text-yellow-700 list-disc list-inside">
+                {% for item in summary.missing_info %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if summary.areas_for_review %}
+        <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-md">
+            <h4 class="text-sm font-medium text-red-900">Areas Requiring Attention</h4>
+            <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+                {% for item in summary.areas_for_review %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Detailed Responses -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-xl font-semibold text-gray-900 mb-6">Detailed Responses</h3>
+        
+        <div class="space-y-6">
+            {% for category, responses in responses_by_category.items %}
+            <div class="border-l-4 border-blue-500 pl-4">
+                <h4 class="text-lg font-medium text-gray-900 mb-3">{{ category }}</h4>
+                
+                {% for response in responses %}
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-700">{{ response.question_text }}</p>
+                    <p class="mt-2 text-gray-900">{{ response.response_text }}</p>
+                    <p class="mt-1 text-xs text-gray-500">{{ response.timestamp|date:"M d, Y H:i" }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Actions -->
+    {% if session.status == 'requires_review' %}
+    <div class="mt-6 flex justify-end space-x-4">
+        <a href="{% url 'review_assessment' session.id %}" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+            Review Assessment
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

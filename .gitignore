@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+env.example
+
+# Environment variables and secrets
+.env
+.env.*
+.env.example
+
+# Django
+*.sqlite3
+/media/
+/staticfiles/
+
+# Logs and test artifacts
+*.log
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+
+# Other Files
+ARCHITECTURE.md
+CLAUDE.md
+MIGRATION_GUIDE.md
+IMPLEMENTATION_GUIDE.md
+verify_setup.py

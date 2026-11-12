@@ -1,0 +1,106 @@
+{% extends 'assessments/base.html' %}
+
+{% block title %}Review Assessment #{{ session.id }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-6">
+        <h2 class="text-3xl font-bold text-gray-900">Professional Review</h2>
+        <p class="mt-2 text-gray-600">Assessment #{{ session.id }} requires your review</p>
+    </div>
+
+    <!-- Alert for flagged assessment -->
+    <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm text-red-700">
+                    This assessment has been flagged for professional review. Please carefully review the responses and determine appropriate next steps.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary -->
+    {% if summary %}
+    <div class="bg-white rounded-lg shadow mb-6 p-6">
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">AI-Generated Summary</h3>
+        <div class="prose max-w-none">
+            <div class="text-gray-700 whitespace-pre-wrap">{{ summary.summary_text }}</div>
+        </div>
+
+        {% if summary.areas_for_review %}
+        <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-md">
+            <h4 class="text-sm font-medium text-red-900">Flagged Areas</h4>
+            <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+                {% for item in summary.areas_for_review %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Detailed Responses -->
+    <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <h3 class="text-xl font-semibold text-gray-900 mb-6">Full Assessment Responses</h3>
+        
+        <div class="space-y-6">
+            {% for category, responses in responses_by_category.items %}
+            <div class="border-l-4 border-blue-500 pl-4">
+                <h4 class="text-lg font-medium text-gray-900 mb-3">{{ category }}</h4>
+                
+                {% for response in responses %}
+                <div class="mb-4 bg-gray-50 p-4 rounded">
+                    <p class="text-sm font-medium text-gray-700">{{ response.question_text }}</p>
+                    <p class="mt-2 text-gray-900">{{ response.response_text }}</p>
+                    <p class="mt-1 text-xs text-gray-500">{{ response.timestamp|date:"M d, Y H:i" }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Review Actions -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Review Actions</h3>
+        <p class="text-gray-600 mb-6">Please review the assessment and take appropriate action:</p>
+        
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            
+            <div class="flex space-x-4">
+                <button 
+                    type="submit" 
+                    name="action" 
+                    value="approve"
+                    class="flex-1 px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium"
+                >
+                    Approve & Mark Complete
+                </button>
+                
+                <button 
+                    type="submit" 
+                    name="action" 
+                    value="reject"
+                    class="flex-1 px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 font-medium"
+                >
+                    Requires Further Action
+                </button>
+            </div>
+            
+            <div class="text-center">
+                <a href="{% url 'dashboard' %}" class="text-gray-600 hover:text-gray-900">
+                    Cancel and return to dashboard
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
