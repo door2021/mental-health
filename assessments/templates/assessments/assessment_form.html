@@ -39,7 +39,39 @@
                 </div>
             </div>
 
-            <!-- Agent's first question -->
+            <!-- Previous conversation history from database -->
+            {% for item in conversation_history %}
+                {% if item.type == 'agent' %}
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                            AI
+                        </div>
+                    </div>
+                    <div class="ml-3 flex-1">
+                        <div class="bg-gray-100 rounded-lg p-3">
+                            <p class="text-sm text-gray-900">{{ item.text }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="flex items-end justify-end">
+                    <div class="mr-3">
+                        <div class="bg-blue-600 text-white rounded-lg p-3">
+                            <p class="text-sm">{{ item.text }}</p>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="h-8 w-8 rounded-full bg-gray-400 flex items-center justify-center text-white">
+                            U
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Current question (next unanswered) -->
+            {% if not is_complete %}
             <div class="flex items-start">
                 <div class="flex-shrink-0">
                     <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
@@ -48,10 +80,11 @@
                 </div>
                 <div class="ml-3 flex-1">
                     <div class="bg-gray-100 rounded-lg p-3">
-                        <p class="text-sm text-gray-900" x-text="currentQuestion"></p>
+                        <p class="text-sm text-gray-900">{{ current_question }}</p>
                     </div>
                 </div>
             </div>
+            {% endif %}
 
             <!-- Dynamic messages will be appended here -->
             <template x-for="message in messages" :key="message.id">
@@ -65,7 +98,7 @@
                             </div>
                             <div class="ml-3 flex-1">
                                 <div class="bg-gray-100 rounded-lg p-3">
-                                    <p class="text-sm text-gray-900" x-text="message.text"></p>
+                                    <div class="text-sm text-gray-900 markdown-content" x-html="renderMarkdown(message.text)"></div>
                                 </div>
                             </div>
                         </div>
@@ -144,8 +177,7 @@ function assessmentChat() {
         userInput: '',
         messages: [],
         loading: false,
-        isComplete: false,
-        currentQuestion: "How would you describe your mood and emotional wellbeing over the past 2 weeks?",
+        isComplete: {{ is_complete|yesno:"true,false" }},
         messageId: 0,
 
         init() {
@@ -154,6 +186,14 @@ function assessmentChat() {
                 const messagesDiv = document.getElementById('messages');
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
             });
+        },
+
+        renderMarkdown(text) {
+            // Render markdown text using marked.js
+            if (typeof marked !== 'undefined') {
+                return marked.parse(text || '');
+            }
+            return text;
         },
 
         async sendMessage() {

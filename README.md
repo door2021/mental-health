@@ -100,6 +100,38 @@ python verify_setup.py
 
 ---
 
+## 📊 LangSmith Monitoring (Optional)
+
+Enable tracing and monitoring for debugging and analytics:
+
+### Setup
+
+1. Create account at [smith.langchain.com](https://smith.langchain.com)
+2. Get API key from Settings → API Keys
+3. Add to `.env`:
+
+```bash
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
+LANGCHAIN_API_KEY=lsv2_pt_your_key_here
+LANGCHAIN_PROJECT=mental-health-assessment
+```
+
+### What Gets Traced
+
+| Component | Traces |
+|-----------|--------|
+| Summary Generation | LLM calls to Groq API |
+| Reflection Step | Validation LLM calls |
+| Tool Calls | store_response, check_distress, etc. |
+| Graph Execution | Node transitions, state changes |
+
+### View Traces
+
+Visit: `https://smith.langchain.com/` → Select project `mental-health-assessment`
+
+---
+
 ## 📁 Project Structure
 
 ```
@@ -135,14 +167,15 @@ mental-health-assessment/        # Root project directory
 ├── requirements.txt          # Python dependencies
 ├── .env.example             # Environment variable template
 ├── manage.py                # Django management script
-├── verify_setup.py          # Setup verification
 │
-└── Documentation/
-    ├── README.md            # This file
-    ├── ARCHITECTURE.md      # Detailed architecture docs
-    ├── MIGRATION_GUIDE.md   # Migration & changes guide
-    ├── CLAUDE.md            # Development guide
-    └── IMPLEMENTATION_SUMMARY.md
+├── docs/                    # Documentation folder
+│   ├── TECHNICAL_REPORT.md  # Formal technical report (5-7 pages)
+│   ├── TEST_CASES.md        # Test scenarios with inputs/outputs
+│   └── DATASET.md           # Dataset and knowledge base
+│
+├── README.md                # This file - Quick start guide
+├── ARCHITECTURE.md          # System architecture with diagrams
+└── CLAUDE.md                # Development guide
 ```
 
 ---
@@ -382,10 +415,11 @@ python manage.py shell
 | Document | Purpose |
 |----------|---------|
 | **README.md** (this file) | Quick start guide |
-| **ARCHITECTURE.md** | Detailed architecture & design |
-| **MIGRATION_GUIDE.md** | Changes summary & migration |
+| **ARCHITECTURE.md** | Detailed architecture & design with diagrams |
 | **CLAUDE.md** | Development guide |
-| **IMPLEMENTATION_SUMMARY.md** | Implementation details |
+| **docs/TECHNICAL_REPORT.md** | Formal technical report (5-7 pages) |
+| **docs/TEST_CASES.md** | Test scenarios with sample inputs/outputs |
+| **docs/DATASET.md** | Dataset and knowledge base documentation |
 
 ---
 

@@ -2,8 +2,16 @@
 Django settings for Mental Health Assessment project.
 """
 
+import os
 from pathlib import Path
 from decouple import config
+
+# LangSmith Configuration - MUST be set before any LangChain imports
+# These environment variables are checked at import time by LangChain
+os.environ.setdefault('LANGCHAIN_TRACING_V2', config('LANGCHAIN_TRACING_V2', default='false'))
+os.environ.setdefault('LANGCHAIN_ENDPOINT', config('LANGCHAIN_ENDPOINT', default='https://api.smith.langchain.com'))
+os.environ.setdefault('LANGCHAIN_API_KEY', config('LANGCHAIN_API_KEY', default=''))
+os.environ.setdefault('LANGCHAIN_PROJECT', config('LANGCHAIN_PROJECT', default='mental-health-assessment'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -96,17 +104,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Groq API Key
 GROQ_API_KEY = config('GROQ_API_KEY', default='')
+os.environ.setdefault('GROQ_API_KEY', GROQ_API_KEY)
 
-# LangSmith Configuration (Monitoring & Debugging)
-LANGCHAIN_TRACING_V2 = config('LANGCHAIN_TRACING_V2', default='false')
-LANGCHAIN_ENDPOINT = config('LANGCHAIN_ENDPOINT', default='https://api.smith.langchain.com')
-LANGCHAIN_API_KEY = config('LANGCHAIN_API_KEY', default='')
-LANGCHAIN_PROJECT = config('LANGCHAIN_PROJECT', default='mental-health-assessment')
-
-# Set as environment variables for LangChain to use
-import os
-os.environ['LANGCHAIN_TRACING_V2'] = str(LANGCHAIN_TRACING_V2)
-os.environ['LANGCHAIN_ENDPOINT'] = LANGCHAIN_ENDPOINT
-os.environ['LANGCHAIN_API_KEY'] = LANGCHAIN_API_KEY
-os.environ['LANGCHAIN_PROJECT'] = LANGCHAIN_PROJECT
-os.environ['GROQ_API_KEY'] = GROQ_API_KEY
+# LangSmith settings are configured at the top of this file
+# to ensure they're set before any LangChain imports

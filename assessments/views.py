@@ -65,18 +65,52 @@ class StartAssessmentView(View):
 
 class AssessmentChatView(View):
     """Interactive chat interface for assessment"""
-    
+
     def get(self, request, session_id):
         session = get_object_or_404(AssessmentSession, id=session_id)
-        
+
         # Get existing responses
         responses = session.responses.all().order_by('timestamp')
-        
+
+        # Determine current question based on progress
+        from .services.tools import identify_missing_categories
+        from .services.agent_graph import ASSESSMENT_QUESTIONS
+
+        missing_info = identify_missing_categories.invoke({'session_id': str(session_id)})
+        missing_categories = missing_info.get('missing_categories', [])
+
+        # Determine current question
+        if missing_categories:
+            next_category = missing_categories[0]
+            current_question = ASSESSMENT_QUESTIONS[next_category]
+        else:
+            current_question = "Thank you for completing all the assessment questions. Let me generate a summary for review."
+
+        # Build conversation history from existing responses
+        conversation_history = []
+        for response in responses:
+            # Add the question that was asked
+            conversation_history.append({
+                'type': 'agent',
+                'text': response.question_text
+            })
+            # Add the user's response
+            conversation_history.append({
+                'type': 'user',
+                'text': response.response_text
+            })
+
+        # Check if assessment is complete
+        is_complete = session.status == 'completed' or len(missing_categories) == 0
+
         context = {
             'session': session,
             'responses': responses,
+            'current_question': current_question,
+            'conversation_history': conversation_history,
+            'is_complete': is_complete,
         }
-        
+
         return render(request, 'assessments/assessment_form.html', context)
 
 

@@ -30,8 +30,11 @@
     <div class="bg-white rounded-lg shadow mb-6 p-6">
         <h3 class="text-xl font-semibold text-gray-900 mb-4">AI-Generated Summary</h3>
         <div class="prose max-w-none">
-            <div class="text-gray-700 whitespace-pre-wrap">{{ summary.summary_text }}</div>
+            <div id="summary-content" class="text-gray-700 markdown-content"></div>
         </div>
+        <script>
+            document.getElementById('summary-content').innerHTML = marked.parse(`{{ summary.summary_text|escapejs }}`);
+        </script>
 
         {% if summary.areas_for_review %}
         <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-md">

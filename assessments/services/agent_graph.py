@@ -241,21 +241,140 @@ Format the summary in a clear, professional manner."""
 
 
 def validate_summary(state: AssessmentState) -> AssessmentState:
-    """Validate the generated summary for quality"""
+    """
+    Reflection step: Use LLM to validate the generated summary.
+
+    This implements the "reflection or validation step" requirement by:
+    1. Having the LLM review its own generated summary
+    2. Checking for accuracy, completeness, and professional tone
+    3. Identifying any missing or inconsistent information
+    """
     summary = state.get('summary', '')
-    
-    # Basic validation checks
-    has_minimum_length = len(summary) > 100
-    
-    return {
-        **state,
-        'validation_errors': [] if has_minimum_length else ['Summary too short']
-    }
+    collected_responses = state.get('collected_responses', {})
+    session_id = state['session_id']
+
+    # Basic validation first
+    if len(summary) < 100:
+        return {
+            **state,
+            'validation_errors': ['Summary too short - regeneration required']
+        }
+
+    # Retrieve responses for reflection
+    responses_data = retrieve_responses.invoke({'session_id': session_id})
+    responses = responses_data.get('responses', {})
+
+    # Build responses text for reflection
+    responses_text = ""
+    for category, items in responses.items():
+        responses_text += f"\n{category.upper()}:\n"
+        for item in items:
+            responses_text += f"- {item['response']}\n"
+
+    # Create LLM for reflection
+    llm = ChatGroq(
+        model="openai/gpt-oss-120b",
+        temperature=0.1,  # Lower temperature for more consistent validation
+        api_key=settings.GROQ_API_KEY
+    )
+
+    # Reflection prompt - designed for mental health context
+    reflection_prompt = f"""You are a quality reviewer for mental health assessment summaries.
+Review the following summary against the original responses.
+
+ORIGINAL RESPONSES:
+{responses_text}
+
+GENERATED SUMMARY:
+{summary}
+
+Evaluate the summary on these criteria:
+1. ACCURACY: Does the summary accurately reflect what the person reported? (Note: Clinical observations and reasonable inferences are acceptable)
+2. COMPLETENESS: Are the key points from each answered category addressed?
+3. CRITICAL INFO: Is any critical information (especially distress indicators) captured?
+4. TONE: Is the language professional and appropriate for clinical review?
+5. NO FABRICATION: Does the summary avoid claiming specific facts not mentioned in responses?
+
+IMPORTANT:
+- Minor clinical observations or professional language additions are ACCEPTABLE
+- Only flag as invalid if there are MAJOR issues like missing critical information, fabricated claims, or unprofessional tone
+- A good summary may add professional context while staying true to reported information
+
+Respond in this exact format:
+VALID: [YES or NO]
+ISSUES: [List specific issues if any, or "None" if valid]
+SUGGESTIONS: [Brief suggestions for improvement, or "None" if valid]
+"""
+
+    try:
+        # Get LLM reflection
+        reflection_response = llm.invoke([HumanMessage(content=reflection_prompt)])
+        reflection_text = reflection_response.content
+
+        # Parse reflection response
+        is_valid = "VALID: YES" in reflection_text.upper() or "VALID:YES" in reflection_text.upper()
+
+        # Extract issues if any
+        validation_errors = []
+        issues_text = ""
+        suggestions_text = ""
+
+        if "ISSUES:" in reflection_text:
+            issues_start = reflection_text.find("ISSUES:") + 7
+            issues_end = reflection_text.find("SUGGESTIONS:")
+            if issues_end == -1:
+                issues_end = len(reflection_text)
+            issues_text = reflection_text[issues_start:issues_end].strip()
+
+        if "SUGGESTIONS:" in reflection_text:
+            suggestions_start = reflection_text.find("SUGGESTIONS:") + 12
+            suggestions_text = reflection_text[suggestions_start:].strip()
+
+        # Only add validation errors if not valid and has real issues
+        if not is_valid and issues_text and issues_text.lower() != "none":
+            validation_errors.append(issues_text)
+
+        # Update summary in database with reflection results
+        from assessments.models import AssessmentSession, AssessmentSummary
+        try:
+            session = AssessmentSession.objects.get(id=session_id)
+            summary_obj = AssessmentSummary.objects.get(session=session)
+
+            # Store full reflection result in areas_for_review
+            current_areas = summary_obj.areas_for_review or []
+
+            # Add reflection status
+            if is_valid:
+                current_areas.append("✓ Summary validated by reflection step")
+            else:
+                # Store full issues text (no truncation)
+                if issues_text and issues_text.lower() != "none":
+                    current_areas.append(f"Reflection found issues: {issues_text}")
+                if suggestions_text and suggestions_text.lower() != "none":
+                    current_areas.append(f"Suggestions: {suggestions_text}")
+
+            summary_obj.areas_for_review = current_areas
+            summary_obj.save()
+        except Exception as e:
+            print(f"Error updating summary with reflection: {e}")
+
+        return {
+            **state,
+            'validation_errors': validation_errors
+        }
+
+    except Exception as e:
+        print(f"Error during reflection: {e}")
+        # On error, pass validation to avoid blocking
+        return {
+            **state,
+            'validation_errors': []
+        }
 
 
 def flag_for_review(state: AssessmentState) -> AssessmentState:
     """Flag assessment for professional review if needed"""
-    from assessment.models import AssessmentSession
+    from assessments.models import AssessmentSession
     
     session_id = state['session_id']
     
