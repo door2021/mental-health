@@ -36,3 +36,5 @@ CLAUDE.md
 MIGRATION_GUIDE.md
 IMPLEMENTATION_SUMMARY.md
 verify_setup.py
+langsmith_traces.png
+docs/

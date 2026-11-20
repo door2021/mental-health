@@ -1,0 +1,997 @@
+[
+  {
+    "model": "assessments.psychometricscale",
+    "pk": 1,
+    "fields": {
+      "code": "PHQ9",
+      "name": "Patient Health Questionnaire-9",
+      "description": "A 9-item self-report measure of depression severity. Each item corresponds to one of the DSM-IV criteria for major depressive disorder.",
+      "scale_type": "depression",
+      "min_score": 0,
+      "max_score": 27,
+      "citation": "Kroenke K, Spitzer RL, Williams JB. The PHQ-9: validity of a brief depression severity measure. J Gen Intern Med. 2001;16(9):606-613.",
+      "is_active": true,
+      "order": 1
+    }
+  },
+  {
+    "model": "assessments.psychometricscale",
+    "pk": 2,
+    "fields": {
+      "code": "GAD7",
+      "name": "Generalized Anxiety Disorder 7-item Scale",
+      "description": "A 7-item self-report measure designed to assess the severity of generalized anxiety disorder symptoms.",
+      "scale_type": "anxiety",
+      "min_score": 0,
+      "max_score": 21,
+      "citation": "Spitzer RL, Kroenke K, Williams JB, Löwe B. A brief measure for assessing generalized anxiety disorder: the GAD-7. Arch Intern Med. 2006;166(10):1092-1097.",
+      "is_active": true,
+      "order": 2
+    }
+  },
+  {
+    "model": "assessments.psychometricscale",
+    "pk": 3,
+    "fields": {
+      "code": "PSS10",
+      "name": "Perceived Stress Scale-10",
+      "description": "A 10-item self-report measure of the degree to which situations in one's life are appraised as stressful.",
+      "scale_type": "stress",
+      "min_score": 0,
+      "max_score": 40,
+      "citation": "Cohen S, Kamarck T, Mermelstein R. A global measure of perceived stress. J Health Soc Behav. 1983;24(4):385-396.",
+      "is_active": true,
+      "order": 3
+    }
+  },
+  {
+    "model": "assessments.psychometricscale",
+    "pk": 4,
+    "fields": {
+      "code": "ISI",
+      "name": "Insomnia Severity Index",
+      "description": "A 7-item self-report measure designed to assess the nature, severity, and impact of insomnia.",
+      "scale_type": "sleep",
+      "min_score": 0,
+      "max_score": 28,
+      "citation": "Bastien CH, Vallières A, Morin CM. Validation of the Insomnia Severity Index as an outcome measure for insomnia research. Sleep Med. 2001;2(4):297-307.",
+      "is_active": true,
+      "order": 4
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 1,
+    "fields": {
+      "scale": 1,
+      "item_number": 1,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by little interest or pleasure in doing things?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "anhedonia",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 2,
+    "fields": {
+      "scale": 1,
+      "item_number": 2,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by feeling down, depressed, or hopeless?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "mood",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 3,
+    "fields": {
+      "scale": 1,
+      "item_number": 3,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by trouble falling or staying asleep, or sleeping too much?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "somatic",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 4,
+    "fields": {
+      "scale": 1,
+      "item_number": 4,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by feeling tired or having little energy?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "somatic",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 5,
+    "fields": {
+      "scale": 1,
+      "item_number": 5,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by poor appetite or overeating?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "somatic",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 6,
+    "fields": {
+      "scale": 1,
+      "item_number": 6,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by feeling bad about yourself - or that you are a failure or have let yourself or your family down?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "cognitive",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 7,
+    "fields": {
+      "scale": 1,
+      "item_number": 7,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by trouble concentrating on things, such as reading the newspaper or watching television?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "cognitive",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 8,
+    "fields": {
+      "scale": 1,
+      "item_number": 8,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by moving or speaking so slowly that other people could have noticed? Or the opposite - being so fidgety or restless that you have been moving around a lot more than usual?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "somatic",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 9,
+    "fields": {
+      "scale": 1,
+      "item_number": 9,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by thoughts that you would be better off dead, or of hurting yourself in some way?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "suicidality",
+      "is_critical": true,
+      "critical_threshold": 1
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 10,
+    "fields": {
+      "scale": 2,
+      "item_number": 1,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by feeling nervous, anxious, or on edge?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 11,
+    "fields": {
+      "scale": 2,
+      "item_number": 2,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by not being able to stop or control worrying?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 12,
+    "fields": {
+      "scale": 2,
+      "item_number": 3,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by worrying too much about different things?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 13,
+    "fields": {
+      "scale": 2,
+      "item_number": 4,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by trouble relaxing?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 14,
+    "fields": {
+      "scale": 2,
+      "item_number": 5,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by being so restless that it is hard to sit still?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 15,
+    "fields": {
+      "scale": 2,
+      "item_number": 6,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by becoming easily annoyed or irritable?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 16,
+    "fields": {
+      "scale": 2,
+      "item_number": 7,
+      "question_text": "Over the last 2 weeks, how often have you been bothered by feeling afraid, as if something awful might happen?",
+      "response_options": [
+        {"value": 0, "label": "Not at all"},
+        {"value": 1, "label": "Several days"},
+        {"value": 2, "label": "More than half the days"},
+        {"value": 3, "label": "Nearly every day"}
+      ],
+      "min_value": 0,
+      "max_value": 3,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 17,
+    "fields": {
+      "scale": 3,
+      "item_number": 1,
+      "question_text": "In the last month, how often have you been upset because of something that happened unexpectedly?",
+      "response_options": [
+        {"value": 0, "label": "Never"},
+        {"value": 1, "label": "Almost never"},
+        {"value": 2, "label": "Sometimes"},
+        {"value": 3, "label": "Fairly often"},
+        {"value": 4, "label": "Very often"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "distress",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 18,
+    "fields": {
+      "scale": 3,
+      "item_number": 2,
+      "question_text": "In the last month, how often have you felt that you were unable to control the important things in your life?",
+      "response_options": [
+        {"value": 0, "label": "Never"},
+        {"value": 1, "label": "Almost never"},
+        {"value": 2, "label": "Sometimes"},
+        {"value": 3, "label": "Fairly often"},
+        {"value": 4, "label": "Very often"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "distress",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 19,
+    "fields": {
+      "scale": 3,
+      "item_number": 3,
+      "question_text": "In the last month, how often have you felt nervous and stressed?",
+      "response_options": [
+        {"value": 0, "label": "Never"},
+        {"value": 1, "label": "Almost never"},
+        {"value": 2, "label": "Sometimes"},
+        {"value": 3, "label": "Fairly often"},
+        {"value": 4, "label": "Very often"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "distress",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 20,
+    "fields": {
+      "scale": 3,
+      "item_number": 4,
+      "question_text": "In the last month, how often have you felt confident about your ability to handle your personal problems?",
+      "response_options": [
+        {"value": 0, "label": "Never"},
+        {"value": 1, "label": "Almost never"},
+        {"value": 2, "label": "Sometimes"},
+        {"value": 3, "label": "Fairly often"},
+        {"value": 4, "label": "Very often"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": true,
+      "weight": 1.0,
+      "subscale": "coping",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 21,
+    "fields": {
+      "scale": 3,
+      "item_number": 5,
+      "question_text": "In the last month, how often have you felt that things were going your way?",
+      "response_options": [
+        {"value": 0, "label": "Never"},
+        {"value": 1, "label": "Almost never"},
+        {"value": 2, "label": "Sometimes"},
+        {"value": 3, "label": "Fairly often"},
+        {"value": 4, "label": "Very often"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": true,
+      "weight": 1.0,
+      "subscale": "coping",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 22,
+    "fields": {
+      "scale": 3,
+      "item_number": 6,
+      "question_text": "In the last month, how often have you found that you could not cope with all the things that you had to do?",
+      "response_options": [
+        {"value": 0, "label": "Never"},
+        {"value": 1, "label": "Almost never"},
+        {"value": 2, "label": "Sometimes"},
+        {"value": 3, "label": "Fairly often"},
+        {"value": 4, "label": "Very often"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "distress",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 23,
+    "fields": {
+      "scale": 3,
+      "item_number": 7,
+      "question_text": "In the last month, how often have you been able to control irritations in your life?",
+      "response_options": [
+        {"value": 0, "label": "Never"},
+        {"value": 1, "label": "Almost never"},
+        {"value": 2, "label": "Sometimes"},
+        {"value": 3, "label": "Fairly often"},
+        {"value": 4, "label": "Very often"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": true,
+      "weight": 1.0,
+      "subscale": "coping",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 24,
+    "fields": {
+      "scale": 3,
+      "item_number": 8,
+      "question_text": "In the last month, how often have you felt that you were on top of things?",
+      "response_options": [
+        {"value": 0, "label": "Never"},
+        {"value": 1, "label": "Almost never"},
+        {"value": 2, "label": "Sometimes"},
+        {"value": 3, "label": "Fairly often"},
+        {"value": 4, "label": "Very often"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": true,
+      "weight": 1.0,
+      "subscale": "coping",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 25,
+    "fields": {
+      "scale": 3,
+      "item_number": 9,
+      "question_text": "In the last month, how often have you been angered because of things that were outside of your control?",
+      "response_options": [
+        {"value": 0, "label": "Never"},
+        {"value": 1, "label": "Almost never"},
+        {"value": 2, "label": "Sometimes"},
+        {"value": 3, "label": "Fairly often"},
+        {"value": 4, "label": "Very often"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "distress",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 26,
+    "fields": {
+      "scale": 3,
+      "item_number": 10,
+      "question_text": "In the last month, how often have you felt difficulties were piling up so high that you could not overcome them?",
+      "response_options": [
+        {"value": 0, "label": "Never"},
+        {"value": 1, "label": "Almost never"},
+        {"value": 2, "label": "Sometimes"},
+        {"value": 3, "label": "Fairly often"},
+        {"value": 4, "label": "Very often"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "distress",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 27,
+    "fields": {
+      "scale": 4,
+      "item_number": 1,
+      "question_text": "Please rate the current (i.e., last 2 weeks) SEVERITY of your insomnia problem(s): Difficulty falling asleep",
+      "response_options": [
+        {"value": 0, "label": "None"},
+        {"value": 1, "label": "Mild"},
+        {"value": 2, "label": "Moderate"},
+        {"value": 3, "label": "Severe"},
+        {"value": 4, "label": "Very severe"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "severity",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 28,
+    "fields": {
+      "scale": 4,
+      "item_number": 2,
+      "question_text": "Please rate the current (i.e., last 2 weeks) SEVERITY of your insomnia problem(s): Difficulty staying asleep",
+      "response_options": [
+        {"value": 0, "label": "None"},
+        {"value": 1, "label": "Mild"},
+        {"value": 2, "label": "Moderate"},
+        {"value": 3, "label": "Severe"},
+        {"value": 4, "label": "Very severe"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "severity",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 29,
+    "fields": {
+      "scale": 4,
+      "item_number": 3,
+      "question_text": "Please rate the current (i.e., last 2 weeks) SEVERITY of your insomnia problem(s): Problem waking up too early",
+      "response_options": [
+        {"value": 0, "label": "None"},
+        {"value": 1, "label": "Mild"},
+        {"value": 2, "label": "Moderate"},
+        {"value": 3, "label": "Severe"},
+        {"value": 4, "label": "Very severe"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "severity",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 30,
+    "fields": {
+      "scale": 4,
+      "item_number": 4,
+      "question_text": "How SATISFIED/dissatisfied are you with your current sleep pattern?",
+      "response_options": [
+        {"value": 0, "label": "Very satisfied"},
+        {"value": 1, "label": "Satisfied"},
+        {"value": 2, "label": "Moderately satisfied"},
+        {"value": 3, "label": "Dissatisfied"},
+        {"value": 4, "label": "Very dissatisfied"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "satisfaction",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 31,
+    "fields": {
+      "scale": 4,
+      "item_number": 5,
+      "question_text": "How NOTICEABLE to others do you think your sleep problem is in terms of impairing the quality of your life?",
+      "response_options": [
+        {"value": 0, "label": "Not at all noticeable"},
+        {"value": 1, "label": "A little"},
+        {"value": 2, "label": "Somewhat"},
+        {"value": 3, "label": "Much"},
+        {"value": 4, "label": "Very much noticeable"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "impact",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 32,
+    "fields": {
+      "scale": 4,
+      "item_number": 6,
+      "question_text": "How WORRIED/distressed are you about your current sleep problem?",
+      "response_options": [
+        {"value": 0, "label": "Not at all worried"},
+        {"value": 1, "label": "A little"},
+        {"value": 2, "label": "Somewhat"},
+        {"value": 3, "label": "Much"},
+        {"value": 4, "label": "Very much worried"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "distress",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.scaleitem",
+    "pk": 33,
+    "fields": {
+      "scale": 4,
+      "item_number": 7,
+      "question_text": "To what extent do you consider your sleep problem to INTERFERE with your daily functioning (e.g., daytime fatigue, mood, ability to function at work/daily chores, concentration, memory, mood, etc.)?",
+      "response_options": [
+        {"value": 0, "label": "Not at all interfering"},
+        {"value": 1, "label": "A little"},
+        {"value": 2, "label": "Somewhat"},
+        {"value": 3, "label": "Much"},
+        {"value": 4, "label": "Very much interfering"}
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "is_reverse_scored": false,
+      "weight": 1.0,
+      "subscale": "impact",
+      "is_critical": false,
+      "critical_threshold": null
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 1,
+    "fields": {
+      "scale": 1,
+      "severity_level": "minimal",
+      "min_score": 0,
+      "max_score": 4,
+      "clinical_interpretation": "Minimal or no depression symptoms. Scores in this range suggest the individual is experiencing minimal depressive symptoms.",
+      "recommended_action": "No treatment typically needed. Monitor and reassess if symptoms develop."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 2,
+    "fields": {
+      "scale": 1,
+      "severity_level": "mild",
+      "min_score": 5,
+      "max_score": 9,
+      "clinical_interpretation": "Mild depression symptoms. The individual may benefit from watchful waiting and re-evaluation.",
+      "recommended_action": "Watchful waiting; repeat PHQ-9 at follow-up. Consider supportive counseling."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 3,
+    "fields": {
+      "scale": 1,
+      "severity_level": "moderate",
+      "min_score": 10,
+      "max_score": 14,
+      "clinical_interpretation": "Moderate depression symptoms. Treatment may be warranted based on duration, functional impairment, and patient preference.",
+      "recommended_action": "Treatment plan, considering counseling and/or pharmacotherapy."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 4,
+    "fields": {
+      "scale": 1,
+      "severity_level": "moderately_severe",
+      "min_score": 15,
+      "max_score": 19,
+      "clinical_interpretation": "Moderately severe depression symptoms. Active treatment with pharmacotherapy and/or psychotherapy is recommended.",
+      "recommended_action": "Active treatment with antidepressants and/or psychotherapy."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 5,
+    "fields": {
+      "scale": 1,
+      "severity_level": "severe",
+      "min_score": 20,
+      "max_score": 27,
+      "clinical_interpretation": "Severe depression symptoms. Immediate initiation of pharmacotherapy and, if severe impairment or poor response to therapy, referral to mental health specialist for psychotherapy and/or collaborative management.",
+      "recommended_action": "Immediate treatment initiation; consider referral to mental health specialist."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 6,
+    "fields": {
+      "scale": 2,
+      "severity_level": "minimal",
+      "min_score": 0,
+      "max_score": 4,
+      "clinical_interpretation": "Minimal anxiety. Scores in this range suggest minimal anxiety symptoms.",
+      "recommended_action": "No treatment typically needed. Monitor and reassess if symptoms develop."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 7,
+    "fields": {
+      "scale": 2,
+      "severity_level": "mild",
+      "min_score": 5,
+      "max_score": 9,
+      "clinical_interpretation": "Mild anxiety symptoms. Watchful waiting and repeat measure at follow-up.",
+      "recommended_action": "Watchful waiting; repeat GAD-7 at follow-up."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 8,
+    "fields": {
+      "scale": 2,
+      "severity_level": "moderate",
+      "min_score": 10,
+      "max_score": 14,
+      "clinical_interpretation": "Moderate anxiety symptoms. Further evaluation and treatment may be warranted.",
+      "recommended_action": "Treatment plan, considering counseling and/or pharmacotherapy."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 9,
+    "fields": {
+      "scale": 2,
+      "severity_level": "severe",
+      "min_score": 15,
+      "max_score": 21,
+      "clinical_interpretation": "Severe anxiety symptoms. Active treatment warranted; consider referral to mental health specialist.",
+      "recommended_action": "Active treatment; consider referral to mental health specialist."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 10,
+    "fields": {
+      "scale": 3,
+      "severity_level": "minimal",
+      "min_score": 0,
+      "max_score": 13,
+      "clinical_interpretation": "Low perceived stress. The individual reports low levels of stress.",
+      "recommended_action": "No intervention needed. Continue monitoring."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 11,
+    "fields": {
+      "scale": 3,
+      "severity_level": "moderate",
+      "min_score": 14,
+      "max_score": 26,
+      "clinical_interpretation": "Moderate perceived stress. The individual is experiencing a moderate level of stress.",
+      "recommended_action": "Consider stress management techniques, lifestyle modifications."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 12,
+    "fields": {
+      "scale": 3,
+      "severity_level": "severe",
+      "min_score": 27,
+      "max_score": 40,
+      "clinical_interpretation": "High perceived stress. The individual is experiencing high levels of perceived stress.",
+      "recommended_action": "Stress management intervention recommended; consider counseling."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 13,
+    "fields": {
+      "scale": 4,
+      "severity_level": "minimal",
+      "min_score": 0,
+      "max_score": 7,
+      "clinical_interpretation": "No clinically significant insomnia. Sleep patterns appear normal.",
+      "recommended_action": "No treatment needed. Continue healthy sleep habits."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 14,
+    "fields": {
+      "scale": 4,
+      "severity_level": "mild",
+      "min_score": 8,
+      "max_score": 14,
+      "clinical_interpretation": "Subthreshold insomnia. Some sleep difficulties present but below clinical threshold.",
+      "recommended_action": "Sleep hygiene education; monitor symptoms."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 15,
+    "fields": {
+      "scale": 4,
+      "severity_level": "moderate",
+      "min_score": 15,
+      "max_score": 21,
+      "clinical_interpretation": "Clinical insomnia (moderate severity). Sleep difficulties warrant clinical attention.",
+      "recommended_action": "Consider cognitive behavioral therapy for insomnia (CBT-I)."
+    }
+  },
+  {
+    "model": "assessments.severitycutoff",
+    "pk": 16,
+    "fields": {
+      "scale": 4,
+      "severity_level": "severe",
+      "min_score": 22,
+      "max_score": 28,
+      "clinical_interpretation": "Clinical insomnia (severe). Significant sleep impairment requiring treatment.",
+      "recommended_action": "CBT-I recommended; consider sleep specialist referral."
+    }
+  }
+]

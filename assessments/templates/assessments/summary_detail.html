@@ -22,7 +22,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h3 class="text-lg font-medium text-gray-900">Status</h3>
-                <div class="mt-2">
+                <div class="mt-2 flex items-center space-x-3">
                     {% if session.status == 'completed' %}
                         <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                             Completed
@@ -36,6 +36,19 @@
                             {{ session.status }}
                         </span>
                     {% endif %}
+
+                    <!-- Verification Badge -->
+                    {% if grounded_summary %}
+                        {% if grounded_summary.is_verified %}
+                        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            ✓ Verified
+                        </span>
+                        {% else %}
+                        <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            ⚠ Requires Manual Review
+                        </span>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
             <div class="text-right">
@@ -45,8 +58,125 @@
         </div>
     </div>
 
-    <!-- Summary -->
-    {% if summary %}
+    <!-- Scale Scores (New Scale-Based Assessment) -->
+    {% if scale_scores %}
+    <div class="bg-white rounded-lg shadow mb-6 p-6">
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Assessment Scores</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for score in scale_scores %}
+            <div class="border rounded-lg p-4 {% if score.has_critical_response %}border-red-300 bg-red-50{% elif score.severity_level == 'severe' or score.severity_level == 'moderately_severe' %}border-orange-300 bg-orange-50{% elif score.severity_level == 'moderate' %}border-yellow-300 bg-yellow-50{% else %}border-gray-200{% endif %}">
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-semibold text-gray-900">{{ score.scale.name }}</h4>
+                    <span class="text-sm text-gray-500">{{ score.scale.code }}</span>
+                </div>
+
+                <!-- Score Display -->
+                <div class="flex items-baseline space-x-2 mb-2">
+                    <span class="text-3xl font-bold text-gray-900">{{ score.total_score }}</span>
+                    <span class="text-gray-500">/ {{ score.max_possible_score }}</span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-3">
+                    <div class="h-2 rounded-full {% if score.severity_level == 'severe' or score.severity_level == 'moderately_severe' %}bg-red-500{% elif score.severity_level == 'moderate' %}bg-orange-500{% elif score.severity_level == 'mild' %}bg-yellow-500{% else %}bg-green-500{% endif %}"
+                         style="width: {{ score.percentage_score }}%"></div>
+                </div>
+
+                <!-- Severity Badge -->
+                <div class="flex items-center justify-between">
+                    <span class="px-2 py-1 text-xs font-semibold rounded-full
+                        {% if score.severity_level == 'severe' %}bg-red-100 text-red-800
+                        {% elif score.severity_level == 'moderately_severe' %}bg-orange-100 text-orange-800
+                        {% elif score.severity_level == 'moderate' %}bg-yellow-100 text-yellow-800
+                        {% elif score.severity_level == 'mild' %}bg-blue-100 text-blue-800
+                        {% else %}bg-green-100 text-green-800{% endif %}">
+                        {{ score.severity_level|title }}
+                    </span>
+                    {% if score.has_critical_response %}
+                    <span class="text-xs text-red-600 font-medium">⚠ Critical Item Flagged</span>
+                    {% endif %}
+                </div>
+
+                <!-- Clinical Interpretation (collapsed by default) -->
+                <details class="mt-3">
+                    <summary class="text-sm text-blue-600 cursor-pointer hover:text-blue-800">View interpretation</summary>
+                    <p class="mt-2 text-sm text-gray-600">{{ score.clinical_interpretation }}</p>
+                </details>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Grounded Summary (New) -->
+    {% if grounded_summary %}
+    <div class="bg-white rounded-lg shadow mb-6 p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-semibold text-gray-900">Professional Summary</h3>
+            {% if grounded_summary.is_verified %}
+            <span class="text-sm text-green-600">✓ Fact-checked against scores</span>
+            {% endif %}
+        </div>
+
+        <div class="prose max-w-none">
+            <div id="grounded-summary-content" class="text-gray-700 markdown-content"></div>
+        </div>
+        <script>
+            document.getElementById('grounded-summary-content').innerHTML = marked.parse(`{{ grounded_summary.narrative_summary|escapejs }}`);
+        </script>
+
+        <!-- Verification Errors -->
+        {% if grounded_summary.verification_errors %}
+        <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-md">
+            <h4 class="text-sm font-medium text-red-900">Verification Issues Found</h4>
+            <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+                {% for error in grounded_summary.verification_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Verification Warnings -->
+        {% if grounded_summary.verification_warnings %}
+        <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+            <h4 class="text-sm font-medium text-yellow-900">Verification Warnings</h4>
+            <ul class="mt-2 text-sm text-yellow-700 list-disc list-inside">
+                {% for warning in grounded_summary.verification_warnings %}
+                <li>{{ warning }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Review Reasons -->
+        {% if grounded_summary.review_reasons %}
+        <div class="mt-4 p-4 bg-orange-50 border border-orange-200 rounded-md">
+            <h4 class="text-sm font-medium text-orange-900">Flagged for Review</h4>
+            <ul class="mt-2 text-sm text-orange-700 list-disc list-inside">
+                {% for reason in grounded_summary.review_reasons %}
+                <li>{{ reason }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Cited Quotes -->
+        {% if grounded_summary.cited_quotes %}
+        <div class="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-md">
+            <h4 class="text-sm font-medium text-gray-900">Verbatim Patient Responses Referenced</h4>
+            <ul class="mt-2 text-sm text-gray-600 space-y-2">
+                {% for quote in grounded_summary.cited_quotes %}
+                <li class="italic">"{{ quote }}"</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Legacy Summary (for old assessments) -->
+    {% if summary and not grounded_summary %}
     <div class="bg-white rounded-lg shadow mb-6 p-6">
         <h3 class="text-xl font-semibold text-gray-900 mb-4">Professional Summary</h3>
         <div class="prose max-w-none">
@@ -80,15 +210,51 @@
     </div>
     {% endif %}
 
-    <!-- Detailed Responses -->
+    <!-- Scale Responses Detail (New) -->
+    {% if scale_responses_by_scale %}
+    <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <h3 class="text-xl font-semibold text-gray-900 mb-6">Item Responses by Scale</h3>
+
+        {% for scale_code, responses in scale_responses_by_scale.items %}
+        <details class="mb-4 border rounded-lg" {% if forloop.first %}open{% endif %}>
+            <summary class="p-4 cursor-pointer bg-gray-50 hover:bg-gray-100 font-medium text-gray-900">
+                {{ scale_code }} Responses ({{ responses|length }} items)
+            </summary>
+            <div class="p-4 space-y-3">
+                {% for response in responses %}
+                <div class="flex items-start justify-between border-b pb-3 last:border-b-0">
+                    <div class="flex-1">
+                        <p class="text-sm text-gray-600">Q{{ response.item.item_number }}. {{ response.item.question_text|truncatewords:20 }}</p>
+                        {% if response.verbatim_text %}
+                        <p class="text-xs text-gray-500 mt-1 italic">"{{ response.verbatim_text }}"</p>
+                        {% endif %}
+                    </div>
+                    <div class="ml-4 flex items-center space-x-2">
+                        <span class="px-2 py-1 text-sm font-medium rounded {% if response.numeric_value >= 2 %}bg-orange-100 text-orange-800{% else %}bg-gray-100 text-gray-800{% endif %}">
+                            {{ response.numeric_value }}
+                        </span>
+                        {% if response.item.is_critical and response.numeric_value >= response.item.critical_threshold %}
+                        <span class="text-xs text-red-600 font-medium">⚠ Critical</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </details>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Legacy Detailed Responses -->
+    {% if responses_by_category and not scale_responses_by_scale %}
     <div class="bg-white rounded-lg shadow p-6">
         <h3 class="text-xl font-semibold text-gray-900 mb-6">Detailed Responses</h3>
-        
+
         <div class="space-y-6">
             {% for category, responses in responses_by_category.items %}
             <div class="border-l-4 border-blue-500 pl-4">
                 <h4 class="text-lg font-medium text-gray-900 mb-3">{{ category }}</h4>
-                
+
                 {% for response in responses %}
                 <div class="mb-4">
                     <p class="text-sm font-medium text-gray-700">{{ response.question_text }}</p>
@@ -100,6 +266,7 @@
             {% endfor %}
         </div>
     </div>
+    {% endif %}
 
     <!-- Actions -->
     {% if session.status == 'requires_review' %}
